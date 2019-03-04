@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"flag"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -29,8 +30,11 @@ type entry struct {
 }
 
 var (
-	flagFile   = flag.String("file", "", "Report file to read. If this is not set, stdin will be used")
-	flagPretty = flag.Bool("pretty", false, "Pretty print the output")
+	flagFile    = flag.String("file", "", "Report file to read. If this is not set, stdin will be used")
+	flagPretty  = flag.Bool("pretty", false, "Pretty print the output")
+	flagVersion = flag.Bool("version", false, "Print version information")
+	version     = "notset"
+	commitHash  = "notset"
 )
 
 func init() {
@@ -38,6 +42,11 @@ func init() {
 }
 
 func main() {
+	if *flagVersion {
+		fmt.Printf("tripwire-json version %s+%s\n", version, commitHash)
+		return
+	}
+
 	var input io.Reader
 
 	if *flagFile != "" {
